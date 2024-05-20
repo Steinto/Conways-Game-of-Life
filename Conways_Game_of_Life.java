@@ -8,6 +8,31 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class Conways_Game_of_Life{
+    static int readnum(String msg){
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println(msg);
+        while(!keyboard.hasNextInt()){
+            keyboard.nextLine();
+            System.out.println("input error " + msg);
+        }
+        return(keyboard.nextInt());
+    }
+    static int readfirstletter(String msg, char[] alp){
+        Scanner keyboard = new Scanner(System.in);
+        boolean keepGoing = true;
+        int x = 0;
+        while (keepGoing){
+            System.out.println(msg);
+            String a = keyboard.nextLine();
+            x = a.charAt(0);
+            x = x-'a';
+            System.out.println(x);
+            if(x >= 0 && x <= 25){
+                keepGoing = false;
+            }
+        }
+        return x;
+    }
     static void setBoard(int[][] board, int x, int y){
         for (int i = 0; i < y; i++){
             for (int j = 0; j < j; j++){
@@ -39,18 +64,22 @@ public class Conways_Game_of_Life{
         }
         // ⬛⬜
     }
-    static void changeSquare(int[][] board){
+    static void changeSquare(int[][] board, char[]alp){
         Scanner keyboard = new Scanner(System.in);
         
         System.out.println(" ");
-        System.out.println("in what x axis do you want to place the tile? put your answer as an uppercase letter \n(note, you can only place tiles on white squares)");
-        int placeX = keyboard.nextInt();
-        System.out.println(placeX);
-        System.out.println("in what y axis do you want to place the tile? put your answer as an int \n(note, you can only place tiles on white squares)");
-        int placeY = keyboard.nextInt();
+        int placeX = readfirstletter("in what x axis do you want to place the tile? put your answer as a letter \n(note, you can only place tiles on white squares)", alp);
+        int placeY = -1;
+        while(placeY < 0 || placeY > 20){
+            placeY = readnum("in what y axis do you want to place the tile? put your answer as an int from 1 to 20\n(note, you can only place tiles on white squares)");
+        }
+        placeY = placeY - 1;
         System.out.println(placeY);
         
         board[placeY][placeX] = 1;
+        
+        int start = readfirstletter("do you want to start the simulation?", alp);
+        System.out.println(start);
         
         
     }
@@ -58,12 +87,14 @@ public class Conways_Game_of_Life{
         int XLength = 20;
         int YLength = 20;
         int[][] board = new int [YLength][XLength];
-        //char [] alp = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+        char [] alp = {'A', 'B', 'C', 'D', 'e', 'f', 'g', 'h', 'l', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         
         setBoard(board, XLength, YLength);
         renderBoard(board, XLength, YLength);
-        //changeSquare(board);
         
+        
+        changeSquare(board, alp);
         renderBoard(board, XLength, YLength);
+        
     }
 }
