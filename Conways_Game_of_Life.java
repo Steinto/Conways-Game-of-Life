@@ -17,7 +17,7 @@ public class Conways_Game_of_Life{
         }
         return(keyboard.nextInt());
     }
-    static int readfirstletter(String msg, char[] alp){
+    static int readfirstletter(String msg){
         Scanner keyboard = new Scanner(System.in);
         boolean keepGoing = true;
         int x = 0;
@@ -29,6 +29,8 @@ public class Conways_Game_of_Life{
             System.out.println(x);
             if(x >= 0 && x <= 25){
                 keepGoing = false;
+            }else{
+                System.out.println("I need a letter");
             }
         }
         return x;
@@ -42,7 +44,8 @@ public class Conways_Game_of_Life{
     }
     static void renderBoard(int[][] board, int x, int y){
         System.out.print('\u000c');
-        System.out.print("    A  B C  D E  F G H  I J  K L M  N O  P Q  R S T");
+        // System.out.print("    A  B C  D E  F G H  I J  K L M  N O  P Q  R S T");
+        System.out.print("    A B C D E F G H I J K L M N O P Q R S T");
         System.out.print("\n");
         
         for (int i = 0; i < y; i++){
@@ -55,20 +58,47 @@ public class Conways_Game_of_Life{
             System.out.print("| ");
             for (int j = 0; j < x; j++){
                 if(board[i][j] == 0){
-                    System.out.print("⬜ ");
+                    System.out.print(". ");
                 }else{
-                    System.out.print("⬛ ");
+                    System.out.print("■ ");
                 }
             }
             System.out.println("");
         }
-        // ⬛⬜
+        
     }
-    static void changeSquare(int[][] board, char[]alp){
+    static boolean StartQuestion(){
+        boolean start = false;
+        boolean keepAsking = true;
+        int S = 0;
+        while(keepAsking){
+            S = readfirstletter("do you want to start the simulation? (enter 'yes' or 'no')");
+            if (S == 24 || S == 13){
+                keepAsking = false;
+            }
+        }
+        if (S == 24){
+            start = true;
+            return start;
+        }else{
+            return start;
+        }
+        
+    }
+    static void Turn(){
+        int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
+        SimulateTurns(turns);
+    }
+    static void SimulateTurns(int turnNumber){
+        
+        
+        
+    }
+    static void changeSquare(int[][] board){
         Scanner keyboard = new Scanner(System.in);
         
         System.out.println(" ");
-        int placeX = readfirstletter("in what x axis do you want to place the tile? put your answer as a letter \n(note, you can only place tiles on white squares)", alp);
+        int placeX = readfirstletter("in what x axis do you want to place the tile? put your answer as a lower case letter \n(note, you can only place tiles on white squares)");
         int placeY = -1;
         while(placeY < 0 || placeY > 20){
             placeY = readnum("in what y axis do you want to place the tile? put your answer as an int from 1 to 20\n(note, you can only place tiles on white squares)");
@@ -78,8 +108,7 @@ public class Conways_Game_of_Life{
         
         board[placeY][placeX] = 1;
         
-        int start = readfirstletter("do you want to start the simulation?", alp);
-        System.out.println(start);
+        
         
         
     }
@@ -87,14 +116,20 @@ public class Conways_Game_of_Life{
         int XLength = 20;
         int YLength = 20;
         int[][] board = new int [YLength][XLength];
-        char [] alp = {'A', 'B', 'C', 'D', 'e', 'f', 'g', 'h', 'l', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        boolean keepGoing = true;
         
         setBoard(board, XLength, YLength);
         renderBoard(board, XLength, YLength);
         
-        
-        changeSquare(board, alp);
-        renderBoard(board, XLength, YLength);
-        
+        while(keepGoing){
+            changeSquare(board);
+            renderBoard(board, XLength, YLength);
+            boolean start = StartQuestion();
+            if(start){
+                renderBoard(board, XLength, YLength);
+                Turn();
+                keepGoing = false;
+            }
+        }
     }
 }
