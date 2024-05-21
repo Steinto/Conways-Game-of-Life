@@ -85,15 +85,6 @@ public class Conways_Game_of_Life{
         }
         
     }
-    static void Turn(){
-        int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
-        SimulateTurns(turns);
-    }
-    static void SimulateTurns(int turnNumber){
-        
-        
-        
-    }
     static void changeSquare(int[][] board){
         Scanner keyboard = new Scanner(System.in);
         
@@ -112,6 +103,53 @@ public class Conways_Game_of_Life{
         
         
     }
+    static void Turn(int YLength, int XLength, int[][] board){
+        int[][] newboard = new int [YLength][XLength];;
+        int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
+        int ajSquares = 0;
+        for (int l = 0; l < turns; l++){
+            for (int i = 0; i < YLength - 1; i++){
+                for (int j = 0; j < XLength - 1; j++){
+                    
+                    
+                    
+                    
+                    
+                            for (int s = -1; s < 2; s++){
+                                for (int c = -1; c < 2; c++){
+                                    if(l != 19 && i != 19){
+                                        if(l != 0 && i != 0){
+                                            if (s != 0 && c != 0){
+                                                if (board[i+s][j+c] != 0){
+                                                    ajSquares ++;
+                                                    System.out.println(ajSquares);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            System.out.println(ajSquares);
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                
+                
+                
+                
+                
+                
+                }
+            }
+        }
+        // newboard[i][j] = ajSquares;
+                    // System.out.println(ajSquares);
+                    // ajSquares = 0;
+    }
     public static void main(String[] args){
         int XLength = 20;
         int YLength = 20;
@@ -127,7 +165,8 @@ public class Conways_Game_of_Life{
             boolean start = StartQuestion();
             if(start){
                 renderBoard(board, XLength, YLength);
-                Turn();
+                Turn(YLength, XLength, board);
+                renderBoard(board, XLength, YLength);
                 keepGoing = false;
             }
         }
