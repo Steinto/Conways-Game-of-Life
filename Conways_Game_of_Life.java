@@ -104,51 +104,55 @@ public class Conways_Game_of_Life{
         
     }
     static void Turn(int YLength, int XLength, int[][] board){
-        int[][] newboard = new int [YLength][XLength];;
+        int[][] newboard = new int [YLength][XLength];
         int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
         int ajSquares = 0;
+        
         for (int l = 0; l < turns; l++){
-            for (int i = 0; i < YLength - 1; i++){
-                for (int j = 0; j < XLength - 1; j++){
-                    
-                    
-                    
-                    
-                    
-                            for (int s = -1; s < 2; s++){
-                                for (int c = -1; c < 2; c++){
-                                    if(l != 19 && i != 19){
-                                        if(l != 0 && i != 0){
-                                            if (s != 0 && c != 0){
-                                                if (board[i+s][j+c] != 0){
-                                                    ajSquares ++;
-                                                    System.out.println(ajSquares);
-                                                }
-                                            }
-                                        }
+            for (int x = 0; x < YLength; x++){
+                for (int y = 0; y < XLength; y++){
+                    for (int s = -1; s <= 1; s++){
+                        for (int c = -1; c <= 1; c++){
+                            if(!(x == 19 || y == 19)){
+                                if(!(x == 0 || y == 0)){        
+                                    if (board[x+c][y+s] != 0 && !(c == 0 && s == 0)){
+                                        
+                                        ajSquares ++;
+                                        System.out.println(ajSquares);
+                                        
                                     }
                                 }
                             }
-                            System.out.println(ajSquares);
+                        }
+                    }
+                    newboard[x][y] = ajSquares;
+                    ajSquares = 0;
                     
                     
-                    
-                    
-                    
-                    
-                    
-                
-                
-                
-                
-                
-                
                 }
             }
         }
         // newboard[i][j] = ajSquares;
                     // System.out.println(ajSquares);
                     // ajSquares = 0;
+                    // int x = 10;
+                    // int y = 10;
+                        // for (int s = -1; s <= 1; s++){
+                                // for (int c = -1; c <= 1; c++){
+                                    // // if(x != 19 || y != 19){
+                                        // // if(x != 0 || y != 0){
+                                            
+                                                // if (board[x+c][y+s] != 0){
+                                                    // ajSquares ++;
+                                                    // System.out.println(ajSquares);
+                                                // }
+                                            
+                                        // // }
+                                    // // }
+                                    
+                                // }
+                            // }
+                        
     }
     public static void main(String[] args){
         int XLength = 20;
@@ -166,7 +170,7 @@ public class Conways_Game_of_Life{
             if(start){
                 renderBoard(board, XLength, YLength);
                 Turn(YLength, XLength, board);
-                renderBoard(board, XLength, YLength);
+                //renderBoard(board, XLength, YLength);
                 keepGoing = false;
             }
         }
