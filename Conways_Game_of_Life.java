@@ -108,13 +108,14 @@ public class Conways_Game_of_Life{
         int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
         int ajSquares = 0;
         int[][] logicBoard = new int [YLength + 2][XLength + 2];
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 20; j++){
-                logicBoard[i+1][j+1] = board[i][j];
-            }
-        }
-        
         for (int l = 0; l < turns; l++){
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    logicBoard[i+1][j+1] = board[i][j];
+                }
+            }
+        
+        
             for (int x = 1; x < YLength + 1; x++){
                 for (int y = 1; y < XLength + 1; y++){
                     for (int s = -1; s <= 1; s++){
@@ -143,56 +144,63 @@ public class Conways_Game_of_Life{
                     newboard[x][y] = ajSquares;
                     ajSquares = 0;
                 }
-            }
-        }
+            } 
         
-        for (int i = 0; i < 22; i++){
-            for (int j = 0; j < 22; j++){
-                System.out.print(newboard[i][j]);
-            }
-            System.out.println("");
-        }
         
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 20; j++){
-                board[i][j] = newboard[i+1][j+1];
+            for (int i = 0; i < 22; i++){
+                for (int j = 0; j < 22; j++){
+                    System.out.print(newboard[i][j]);
+                }
+                System.out.println("");
             }
-        }
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 20; j++){
-                System.out.print(board[i][j]);
+        
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    board[i][j] = newboard[i+1][j+1];
+                }
             }
-            System.out.println("");
-        }
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 20; j++){
-                if(board[i][j] < 2){
-                    board[i][j] = 0;
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    System.out.print(board[i][j]);
                 }
-                if(board[i][j] > 3){
-                    board[i][j] = 0;
-                }
-                if(board[i][j] == 3){
-                    board[i][j] = 1;
-                }
-                if(logicBoard[i+1][j+1] == 1){
-                    if(board[i][j] == 2 || board[i][j] == 3){
+                System.out.println("");
+            }
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    if(board[i][j] < 2){
+                        board[i][j] = 0;
+                    }
+                    if(board[i][j] > 3){
+                        board[i][j] = 0;
+                    }
+                    if(board[i][j] == 3){
                         board[i][j] = 1;
                     }
-                }else if(board[i][j] == 2){
-                    board[i][j] = 0;
+                    if(logicBoard[i+1][j+1] == 1){
+                        if(board[i][j] == 2 || board[i][j] == 3){
+                            board[i][j] = 1;
+                        }
+                    }else if(board[i][j] == 2){
+                        board[i][j] = 0;
+                    }
                 }
             }
-        }
         
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 20; j++){
-                System.out.print(board[i][j]);
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    System.out.print(board[i][j]);
+                }
+                System.out.println("");
             }
-            System.out.println("");
+            
+            renderBoard(board, XLength, YLength);
+            
+            try { 
+                Thread.sleep(1 * 100); 
+            } catch (InterruptedException ie) { 
+                Thread.currentThread().interrupt(); 
+            } 
         }
-        
-        renderBoard(board, XLength, YLength);
     }
     public static void main(String[] args){
         int XLength = 20;
