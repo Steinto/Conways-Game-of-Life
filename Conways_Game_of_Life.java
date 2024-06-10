@@ -11,10 +11,12 @@ public class Conways_Game_of_Life{
     static int readnum(String msg){
         Scanner keyboard = new Scanner(System.in);
         System.out.println(msg);
+        int input = keyboard.nextInt();
         while(!keyboard.hasNextInt()){
             keyboard.nextLine();
             System.out.println("input error " + msg);
         }
+        
         return(keyboard.nextInt());
     }
     static int readfirstletter(String msg){
@@ -24,13 +26,15 @@ public class Conways_Game_of_Life{
         while (keepGoing){
             System.out.println(msg);
             String a = keyboard.nextLine();
-            x = a.charAt(0);
-            x = x-'a';
-            System.out.println(x);
-            if(x >= 0 && x <= 25){
-                keepGoing = false;
-            }else{
-                System.out.println("I need a letter");
+            if(a.length() == 1){
+                x = a.charAt(0);
+                x = x-'a';
+                System.out.println(x);
+                if(x >= 0 && x <= 25){
+                    keepGoing = false;
+                }else{
+                    System.out.println("I need a letter");
+                }
             }
         }
         return x;
@@ -72,7 +76,7 @@ public class Conways_Game_of_Life{
         boolean keepAsking = true;
         int S = 0;
         while(keepAsking){
-            S = readfirstletter("do you want to start the simulation? (enter 'yes' or 'no')");
+            S = readfirstletter("do you want to start the simulation? (enter 'y' for yes or 'n' for no)");
             if (S == 24 || S == 13){
                 keepAsking = false;
             }
@@ -114,7 +118,6 @@ public class Conways_Game_of_Life{
                     logicBoard[i+1][j+1] = board[i][j];
                 }
             }
-        
         
             for (int x = 1; x < YLength + 1; x++){
                 for (int y = 1; y < XLength + 1; y++){
@@ -218,8 +221,7 @@ public class Conways_Game_of_Life{
             if(start){
                 renderBoard(board, XLength, YLength);
                 Turn(YLength, XLength, board);
-                //renderBoard(board, XLength, YLength);
-                keepGoing = false;
+                
             }
         }
     }
