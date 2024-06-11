@@ -7,39 +7,36 @@
 import java.util.Scanner;
 import java.util.Arrays;
 public class Conways_Game_of_Life{
-    static int readnum(String msg){
+    static int readNum(String msg){
         //this function ask the player for a number and asks again if it is not a number then return the number
         Scanner keyboard = new Scanner(System.in);
         System.out.println(msg);
-        int num = 0;
         while(!keyboard.hasNextInt()){
             keyboard.nextLine();
             System.out.println("input error " + msg);
-            num ++;
         }
-        System.out.println("hi"+num);
         return(keyboard.nextInt());
     }
-    static int readfirstletter(String msg){
+    static int readFirstLetter(String msg){
         //this code will read the inputed letter and convert it to an int only if the input in 1 charactor long and a lower case letter from a-t
         Scanner keyboard = new Scanner(System.in);
         boolean keepGoing = true;
-        int x = 0;
+        int inptInt = 0;
         while (keepGoing){
             System.out.println(msg);
             String a = keyboard.nextLine();
             if(a.length() == 1){
-                x = a.charAt(0);
-                x = x-'a';
-                System.out.println(x);
-                if(x >= 0 && x <= 25){
+                inptInt = a.charAt(0);
+                inptInt = inptInt-'a';
+                System.out.println(inptInt);
+                if(inptInt >= 0 && inptInt <= 25){
                     keepGoing = false;
                 }else{
                     System.out.println("I need a letter");
                 }
             }
         }
-        return x;
+        return inptInt;
     }
     static void setBoard(int[][] board, int x, int y){
         //sets whole board to 0
@@ -50,10 +47,13 @@ public class Conways_Game_of_Life{
         }
     }
     static void renderBoard(int[][] board, int x, int y){
+        //this function prints the current board state
+        //clear screen and bring x axis
         System.out.print('\u000c');
         System.out.print("    A B C D E F G H I J K L M N O P Q R S T");
         System.out.print("\n");
-        for (int i = 0; i < y; i++){
+        for (int i = 0; i < x; i++){
+            //pring y axis
             if(i < 9){
                 System.out.print(" ");
                 System.out.print(i + 1);
@@ -61,7 +61,8 @@ public class Conways_Game_of_Life{
                 System.out.print(i + 1);
             }
             System.out.print("| ");
-            for (int j = 0; j < x; j++){
+            for (int j = 0; j < y; j++){
+                //brind board wit"." if value is 0 and "■" if not
                 if(board[i][j] == 0){
                     System.out.print(". ");
                 }else{
@@ -71,12 +72,13 @@ public class Conways_Game_of_Life{
             System.out.println("");
         }
     }
-    static boolean StartQuestion(){
+    static boolean startQuestion(){
+        //this function asks player if they want to start the imulation
         boolean start = false;
         boolean keepAsking = true;
         int S = 0;
         while(keepAsking){
-            S = readfirstletter("do you want to start the simulation? (enter 'y' for yes or 'n' for no)");
+            S = readFirstLetter("Do you want to start the simulation? \n(enter 'y' for yes or 'n' for no)");
             if (S == 24 || S == 13){
                 keepAsking = false;
             }
@@ -89,10 +91,11 @@ public class Conways_Game_of_Life{
         }
     }
     static void clearQuestion(int[][] board, int x, int y){
+        //this function asks player if they want to clear the board after a turn
         boolean keepAsking = true;
         int S = 0;
         while(keepAsking){
-            S = readfirstletter("do you want to clear the board? (enter 'y' for yes or 'n' for no)");
+            S = readFirstLetter("Do you want to clear the board? \n(enter 'y' for yes or 'n' for no)");
             if (S == 24 || S == 13){
                 keepAsking = false;
             }
@@ -103,12 +106,13 @@ public class Conways_Game_of_Life{
         }
     }
     static void changeSquare(int[][] board){
+        //this function asks the x and y coordinates the player wants to change and changes that part of the 2d array
         Scanner keyboard = new Scanner(System.in);
         System.out.println(" ");
-        int placeX = readfirstletter("in what x axis do you want to place the tile? put your answer as a lower case letter \n(note, you can only place tiles on white squares)");
+        int placeX = readFirstLetter("In what x axis do you want to place the tile? \nput your answer as a lower case letter \n(note, you can only place tiles on white squares)");
         int placeY = -1;
         while(placeY < 0 || placeY > 20){
-            placeY = readnum("in what y axis do you want to place the tile? put your answer as an int from 1 to 20\n(note, you can only place tiles on white squares)");
+            placeY = readNum("In what y axis do you want to place the tile? \nput your answer as an int from 1 to 20\n(note, you can only place tiles on white squares)");
         }
         placeY = placeY - 1;
         System.out.println(placeY);
@@ -118,10 +122,10 @@ public class Conways_Game_of_Life{
             board[placeY][placeX] = 0;
         }
     }
-    static void Turn(int YLength, int XLength, int[][] board){
+    static void turn(int YLength, int XLength, int[][] board){
         //this function checks the surrounding squares for all squares on the board then changes them depending on the 4 rules.
         int[][] newboard = new int [YLength + 2][XLength + 2];
-        int turns = readnum("How many numbers of turns do you want to advance? answer with an interger.");
+        int turns = readNum("How many numbers of turns do you want to advance? answer with an interger.");
         int ajSquares = 0;
         int[][] logicBoard = new int [YLength + 2][XLength + 2];
         for (int l = 0; l < turns; l++){
@@ -210,11 +214,11 @@ public class Conways_Game_of_Life{
         while(keepGoing){
             changeSquare(board);
             renderBoard(board, XLength, YLength);
-            boolean start = StartQuestion();
+            boolean start = startQuestion();
             //if they want to start a turn
             if(start){
                 renderBoard(board, XLength, YLength);
-                Turn(YLength, XLength, board);
+                turn(YLength, XLength, board);
                 clearQuestion(board, XLength, YLength);
             }
         }
