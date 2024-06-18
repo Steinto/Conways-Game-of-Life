@@ -69,8 +69,10 @@ public class Conways_Game_of_Life{
                     System.out.print("■ ");
                 }
             }
+            System.out.print("|" + (i + 1));
             System.out.println("");
         }
+        System.out.println("    A B C D E F G H I J K L M N O P Q R S T");
     }
     static boolean startQuestion(){
         //this function asks player if they want to start the imulation
@@ -109,7 +111,7 @@ public class Conways_Game_of_Life{
         //this function asks the x and y coordinates the player wants to change and changes that part of the 2d array
         Scanner keyboard = new Scanner(System.in);
         System.out.println(" ");
-        int placeX = readFirstLetter("In what x axis do you want to place the tile? \nput your answer as a lower case letter \n(note, you can only place tiles on white squares)");
+        int placeX = readFirstLetter("In what x axis do you want to place the tile? \nput your answer as a lower case letter from a-t \n(note, you can only place cells on dots)");
         int placeY = -1;
         while(placeY < 0 || placeY > 20){
             placeY = readNum("In what y axis do you want to place the tile? \nput your answer as an int from 1 to 20\n(note, you can only place tiles on white squares)");
@@ -141,29 +143,17 @@ public class Conways_Game_of_Life{
                             if (logicBoard[x+c][y+s] != 0 && !(c == 0 && s == 0)){
                                 ajSquares ++;
                                 System.out.println(ajSquares);    
-                            }
+                            }  
                         }
                     }
-                    newboard[x][y] = ajSquares;
+                    logicBoard[x][y] = ajSquares;
                     ajSquares = 0;
                 }
             } 
-            for (int i = 0; i < 22; i++){
-                for (int j = 0; j < 22; j++){
-                    System.out.print(newboard[i][j]);
-                }
-                System.out.println("");
-            }
             for (int i = 0; i < 20; i++){
                 for (int j = 0; j < 20; j++){
                     board[i][j] = newboard[i+1][j+1];
                 }
-            }
-            for (int i = 0; i < 20; i++){
-                for (int j = 0; j < 20; j++){
-                    System.out.print(board[i][j]);
-                }
-                System.out.println("");
             }
             for (int i = 0; i < 20; i++){
                 for (int j = 0; j < 20; j++){
@@ -181,15 +171,9 @@ public class Conways_Game_of_Life{
                             board[i][j] = 1;
                         }
                     }else if(board[i][j] == 2){
-                        board[i][j] = 0;
+                        board[i][j] = 0; 
                     }
                 }
-            }
-            for (int i = 0; i < 20; i++){
-                for (int j = 0; j < 20; j++){
-                    System.out.print(board[i][j]);
-                }
-                System.out.println("");
             }
             renderBoard(board, XLength, YLength);
             try { 
@@ -209,6 +193,7 @@ public class Conways_Game_of_Life{
         //set and render board
         setBoard(board, XLength, YLength);
         renderBoard(board, XLength, YLength);
+        System.out.println("Welcome to Conways Game of Life! \n---------------------------------\n \nThis is a cellular automation game. \nMeaning that you choose starting conditions and\nthe simulation runs from a set of predetermined rules;\ndependant on the surrounding cells.\n \nIn the grid above you will choose what cells are\nalive or not by inputting their x and y coordinates.\nTo input a number or letter the program will first prompt you,\nthen you can input a letter or number depending on the question.\n --------------------------------------------------------------\n \nHere are the four rules:\n    Rule 1 Each cell with one or no neighbors dies as if by solitude.\n    Rule 2 Each cell with four or more neighbors dies as if by overpopulation.\n    Rule 3 Each cell with two or three neighbors survives.\n    Rule 4 Each unpopulated cell with three neighbors becomes populated");
         
         //loop to keep programme running
         while(keepGoing){
