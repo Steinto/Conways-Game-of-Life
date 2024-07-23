@@ -1,0 +1,260 @@
+/**
+ * class Conways Game of Life
+ *
+ * Toby Steiner
+ * 14/05/2024
+ */
+import java.util.Scanner;
+import java.util.Arrays;
+public class a{
+    static int readNum(String msg){
+        //this function ask the player for a number and asks again if it is not a number then return the number
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println(msg);
+        /*while the inputed number isn't and intager, keep asking and print error message*/
+        while(!keyboard.hasNextInt()){
+            keyboard.nextLine();
+            System.out.println("input error \n" + msg);
+        }
+        return(keyboard.nextInt());
+    }
+    static int readFirstLetter(String msg){
+        //this code will read the inputed letter and convert it to an int only if the input in 1 charactor long and a lower case letter from a-t
+        Scanner keyboard = new Scanner(System.in);
+        boolean keepGoing = true;
+        int inptInt = 0;
+        /*keep going untill letter between a and z is inputed*/
+        while (keepGoing){
+            System.out.println(msg);
+            String a = keyboard.nextLine();
+            if(a.length() == 1){
+                inptInt = a.charAt(0);
+                inptInt = inptInt-'a';
+                if(inptInt >= 0 && inptInt <= 25){
+                    keepGoing = false;
+                }else{
+                    System.out.println("I need a letter");
+                }
+            }
+        }
+        /*return the inputed letter as an intager*/
+        return inptInt;
+    }
+    static void setBoard(int[][] board, int x, int y){
+        for (int i = 0; i < y; i++){
+            for (int j = 0; j < x; j++){
+                board[i][j] = 0;
+            }
+        }
+    }
+    static void renderBoard(int[][] board, int x, int y){
+        //this function prints the current board state
+        //clear screen and bring x axis
+        System.out.print('\u000c');
+        System.out.print("    A B C D E F G H I J K L M N O P Q R S T");
+        System.out.print("\n");
+        for (int i = 0; i < x; i++){
+            /*if under 9th repeet print number with a space in front, if not print alone this if for propper spacing*/
+            if(i < 9){
+                System.out.print(" ");
+                System.out.print(i + 1);
+            }else{
+                System.out.print(i + 1);
+            }
+            System.out.print("| ");
+            for (int j = 0; j < y; j++){
+                /*brind board wit"." if value is 0 and "■" if not*/
+                if(board[i][j] == 0){
+                    System.out.print(". ");
+                }else{
+                    System.out.print("■ ");
+                }
+            }
+            System.out.print("|" + (i + 1));
+            System.out.println("");
+        }
+        System.out.println("    A B C D E F G H I J K L M N O P Q R S T");
+    }
+    /**
+     * this function is called when the player is asked if they want to start the simulation
+     * the program asks the player if they want to start the simulation
+     * if they enter 'y' start = true is returned
+     * if they enter 'n' start = false is returned
+     */
+    static boolean startQuestion(){
+        boolean start = false;
+        boolean keepAsking = true;
+        int S = 0;
+        /*ask if player wants to start the simulation*/
+        while(keepAsking){
+            S = readFirstLetter("Do you want to start the simulation? \n(enter 'y' for yes or 'n' for no)");
+            if (S == 24 || S == 13){
+                keepAsking = false;
+            }
+        }
+        /*return start = true for yes and start = false for no*/
+        if (S == 24){
+            start = true;
+            return start;
+        }else{
+            return start;
+        }
+    }
+    /**
+     * this function is called when the player is asked if they want to clear the board
+     * the program asks the player if they want to clear the board 
+     * if they enter 'y' the board is cleared
+     * if they enter 'n' the board isn't cleared and the function ends
+     * This function returns nothing
+     */
+    static void clearQuestion(int[][] board, int x, int y){
+        boolean keepAsking = true;
+        int S = 0;
+        while(keepAsking){
+            S = readFirstLetter("Do you want to clear the board? \n(enter 'y' for yes or 'n' for no)");
+            if (S == 24 || S == 13){
+                keepAsking = false;
+            }
+        }
+        if (S == 24){
+            setBoard(board, x, y);
+            renderBoard(board, x, y);
+        }
+    }
+    /**
+     * this function is called when the player must place a cell on the board
+     * it asks two questions, one for the x-axis and one for the y
+     * it then changes the corresponding point on the board 2d array to a live cell
+     * or to a dead cell if the chosen cell is already alive
+     * this function returns nothing
+     */
+    static void changeSquare(int[][] board){
+        Scanner keyboard = new Scanner(System.in);
+        /*asking for x and y coodinate respectivly*/
+        boolean keepAsking = true;
+        int placeX = -1;
+        while(keepAsking){
+            placeX = readFirstLetter("Please enter a lowercase letter from a to t, this will be the x-axis of your tile");
+            if (placeX > 0 && placeX < 20){
+                keepAsking = false;
+            }
+        }
+        int placeY = -1;
+        while(placeY < 0 || placeY > 20){
+            placeY = readNum("Please enter an integer from 1 to 20, this will be the y axis of your tile");
+        }
+        placeY = placeY - 1;
+        /*change chosen point depending on its current state*/
+        if(board[placeY][placeX] == 0){
+            board[placeY][placeX] = 1;
+        }else if(board[placeY][placeX] == 1){
+            board[placeY][placeX] = 0;
+        }
+    }
+    /**
+     * this function uses a series of for loops to looks through all the points on the board and checks for all adjasant alive square
+     * then change each square depending on the number of alive adjasant squares
+     * this function returns nothing
+     */
+    static void turn(int YLength, int XLength, int[][] board){
+        /*this fuction creates a second 2d array 2 points wider and puts the smaller array inside it, this is to deal with edge cases and reading order errors */
+        int[][] newboard = new int [YLength + 2][XLength + 2];
+        int turns = -1;
+        int ajSquares = 0;
+        int[][] logicBoard = new int [YLength + 2][XLength + 2];
+        /*ask player how many turn they want to pass 1 to 99*/
+        while(turns < 0 || turns > 100){
+            turns = readNum("How many numbers of turns do you want to advance? answer with an integer from 1 to 99");
+        }
+        /*this loop is to happen as many times as the player inputed*/
+        for (int l = 0; l < turns; l++){
+            /*set the logic board to origonal board*/
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    logicBoard[i+1][j+1] = board[i][j];
+                }
+            }
+            /*check every adjasant square around every square for its status. alive or not */
+            for (int x = 1; x < YLength + 1; x++){
+                for (int y = 1; y < XLength + 1; y++){
+                    for (int s = -1; s <= 1; s++){
+                        for (int c = -1; c <= 1; c++){
+                            if (logicBoard[x+c][y+s] != 0 && !(c == 0 && s == 0)){
+                                ajSquares ++;
+                                System.out.println(ajSquares);    
+                            }
+                        }
+                    }
+                    /*set the point on the new board to the number of adjasant squares around the given point*/
+                    newboard[x][y] = ajSquares;
+                    ajSquares = 0;
+                }
+            } 
+            /*redefine the origonal board as the number of adjasant squares around a given point*/
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    board[i][j] = newboard[i+1][j+1];
+                }
+            }
+            /*change the state of each point depending on the ammount of alive adjasant squares around it*/
+            for (int i = 0; i < 20; i++){
+                for (int j = 0; j < 20; j++){
+                    if(board[i][j] < 2){
+                        board[i][j] = 0;
+                    }
+                    if(board[i][j] > 3){
+                        board[i][j] = 0;
+                    }
+                    if(board[i][j] == 3){
+                        board[i][j] = 1;
+                    }
+                    if(logicBoard[i+1][j+1] == 1){
+                        if(board[i][j] == 2 || board[i][j] == 3){
+                            board[i][j] = 1;
+                        }
+                    }else if(board[i][j] == 2){
+                        board[i][j] = 0;
+                    }
+                }
+            }
+            /*render board and wait 0.5 seconds to restart loop*/
+            renderBoard(board, XLength, YLength);
+            try { 
+                Thread.sleep(1 * 100); 
+            } catch (InterruptedException ie) { 
+                Thread.currentThread().interrupt(); 
+            } 
+        }
+    }
+    /**
+     * this is the main function of the program 
+     * it instigates the main variables for the program
+     * sets/renders the board and prints the starting paragraph
+     * 
+     * the main body of this is a while loop that doesn't stop
+     * each loop it will render the board and ask the player to change a square 
+     * it will then ask the player if they want to start, if they say yes the nested if statement will take them through a turn
+     */
+    public static void main(String[] args){
+        int XLength = 20;
+        int YLength = 20;
+        int[][] board = new int [YLength][XLength];
+        boolean keepGoing = true;
+        
+        setBoard(board, XLength, YLength);
+        renderBoard(board, XLength, YLength);
+        System.out.println("\nWelcome to Conways Game of Life! \n---------------------------------\n \nThis is a cellular automation game. \nMeaning that you choose starting conditions and\nthe simulation runs from a set of predetermined rules;\ndependant on the surrounding cells.\n \nIn the grid above you will choose what cells are\nalive or not by inputting their x and y coordinates.\nTo input a number or letter the program will first prompt you,\nthen you can input a letter or number depending on the question,\n and finally hit the enter key to input the number/letter.\n\nwhen the program prompts you for a letter, \nplease enter a lowercase letter within the parameters of the question\nWhen the program prompts you for a number, \nplease enter a whole number within the parametres\nnote, you can only place tiles on dots, \nif you choose an alive square, it will go back to being dead\n--------------------------------------------------------------\n \nHere are the four rules:\n    Rule 1 Each cell with one or no neighbors dies as if by solitude.\n    Rule 2 Each cell with four or more neighbors dies as if by overpopulation.\n    Rule 3 Each cell with two or three neighbors survives.\n    Rule 4 Each unpopulated cell with three neighbors becomes populated");
+        
+        while(keepGoing){
+            changeSquare(board);
+            renderBoard(board, XLength, YLength);
+            boolean start = startQuestion();
+            /*if statment for if they want to start a turn*/
+            if(start){
+                renderBoard(board, XLength, YLength);
+                turn(YLength, XLength, board);
+                clearQuestion(board, XLength, YLength);
+            }
+        }
+    }
+}
